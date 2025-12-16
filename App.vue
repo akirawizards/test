@@ -1,19 +1,5 @@
-<script setup>
-// 1. ロジックを書く場所
-import { ref } from 'vue'
-
-// リアクティブな変数（画面に反映される変数）の定義
-const title = ref('Hello Vue!')
-const count = ref(0)
-
-// 関数の定義
-const increment = () => {
-  count.value++
-}
-</script>
-
 <template>
-  <div class="app-container">
+  <div id="app" class="app-container">
     <h1>{{ title }}</h1>
     <p>ボタンを押した回数: {{ count }}</p>
     
@@ -23,29 +9,33 @@ const increment = () => {
   </div>
 </template>
 
+<script>
+export default {
+  name: 'App',
+  // Vue 2では data は関数である必要があります
+  data() {
+    return {
+      title: 'Hello Vue 2.3.3!',
+      count: 0
+    }
+  },
+  // 関数は methods の中に記述します
+  methods: {
+    increment() {
+      // this を使ってデータにアクセスします
+      this.count++
+    }
+  }
+}
+</script>
+
 <style scoped>
-/* 3. CSS（スタイル）を書く場所 */
 .app-container {
   text-align: center;
   margin-top: 60px;
   font-family: Arial, sans-serif;
 }
-
 h1 {
-  color: #42b983; /* Vueの公式カラー */
-}
-
-button {
-  background-color: #42b983;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #3aa876;
+  color: #42b983;
 }
 </style>
