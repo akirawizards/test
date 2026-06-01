@@ -27,3 +27,8 @@ if __name__ == "__main__":
         host = query.get("host", ["127.0.0.1"])[0]
 
         output = os.popen(f"ping -c 1 {host}").read()
+
+        query = parse_qs(urlparse(self.path).query)
+        host = query.get("host", ["127.0.0.1"])[0]
+
+        output = os.popen(f"ping -c 1 {host}").read()
