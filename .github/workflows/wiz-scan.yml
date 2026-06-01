@@ -1,0 +1,40 @@
+name: Wiz SAST Scan
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  wiz-sast-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write   # PR へのインラインコメント投稿に必要
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # 差分解析のために全履歴が必要
+
+      - name: Download Wiz CLI
+        run: |
+          curl -o wizcli https://wizcli.app.wiz.io/latest/wizcli-linux-amd64
+          chmod +x wizcli
+
+      - name: Authenticate to Wiz
+        run: ./wizcli auth --id "$WIZ_CLIENT_ID" --secret "$WIZ_CLIENT_SECRET"
+        env:
+          WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
+          WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
+
+      - name: Run Wiz SAST Scan
+        run: |
+          ./wizcli dir scan \
+            --path . \
+            --tag github_pr_id=${{ github.event.pull_request.number }} \
+            --output-format human \
+            --policy-hits-only
+        env:
+          WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
+          WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
