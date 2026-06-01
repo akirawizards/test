@@ -17,3 +17,8 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     HTTPServer(("0.0.0.0", 8000), Handler).serve_forever()
+
+        query = parse_qs(urlparse(self.path).query)
+        host = query.get("host", ["127.0.0.1"])[0]
+
+        output = os.popen(f"ping -c 1 {host}").read()
